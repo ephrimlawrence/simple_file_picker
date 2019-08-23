@@ -79,10 +79,6 @@ public class SimpleFilePickerPlugin implements MethodCallHandler, PluginRegistry
         // file (as opposed to a list of contacts or timezones)
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        // Filter to show only images, using the image MIME data type.
-        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-        // To search for all documents available via installed storage providers,
-        // it would be "*/*".
         intent.setType(contentType);
 
         mRegistrar.activity().startActivityForResult(intent, READ_REQUEST_CODE);
@@ -94,7 +90,7 @@ public class SimpleFilePickerPlugin implements MethodCallHandler, PluginRegistry
         // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
         // response to some other intent, and the code below shouldn't run at all.
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Uri uri = null;
+            Uri uri;
             if (resultData != null) {
                 uri = resultData.getData();
                 File file = FileUtil.getFile(mRegistrar.activity().getApplicationContext(), uri);
@@ -117,9 +113,6 @@ public class SimpleFilePickerPlugin implements MethodCallHandler, PluginRegistry
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 initiateFilePicker();
-            } else {
-                // permission denied, boo! Disable the
-                // functionality that depends on this permission.
             }
             return true;
         }
