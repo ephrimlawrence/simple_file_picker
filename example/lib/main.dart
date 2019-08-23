@@ -12,20 +12,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String path = 'Unknown';
+
   String _platformVersion = 'Unknown';
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    // initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
+  /*  Future<void> initPlatformState() async {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await SimpleFilePicker.platformVersion;
+      platformVersion = await SimpleFilePicker.getPath();
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -39,7 +41,7 @@ class _MyAppState extends State<MyApp> {
       _platformVersion = platformVersion;
     });
   }
-
+ */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,8 +49,18 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body:  Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text("Path: $path"),
+              RaisedButton(
+                child: Text("Open File Picker"),
+                onPressed: () => SimpleFilePicker.getPath().then((var p) {
+                  setState(() => this.path = p);
+                }),
+              ),
+            ],
         ),
       ),
     );
